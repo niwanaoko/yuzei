@@ -2,22 +2,28 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ウイルス性の治療解説動画</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
 
-        body {
-            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Meiryo", "Noto Sans JP", sans-serif;
-            background-color: #f1f5f9;
-            color: #334155;
+        /* iOS Safariの高さ100%対策 */
+        html, body {
+            height: 100%;
+            height: -webkit-fill-available;
+            margin: 0;
+            padding: 0;
             overflow: hidden;
             touch-action: none;
+            background-color: #f1f5f9;
+            color: #334155;
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Meiryo", "Noto Sans JP", sans-serif;
         }
 
         .video-canvas {
             height: 100vh;
+            height: -webkit-fill-available;
             width: 100vw;
             display: flex;
             align-items: center;
@@ -111,6 +117,8 @@
             background: rgba(255, 255, 255, 0.98);
             color: #1e293b;
             padding: 30px 40px;
+            /* iPhoneのホームバーと被らないよう下部余白を自動調整 */
+            padding-bottom: env(safe-area-inset-bottom, 30px);
             text-align: center;
             font-size: 1.6rem;
             font-weight: 500;
@@ -144,6 +152,8 @@
             opacity: 0;
             transition: all 0.3s;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            -webkit-appearance: none;
+            appearance: none;
         }
         .video-canvas:hover .nav-btn { opacity: 1; }
         .nav-btn:hover { background: white; transform: translateY(-50%) scale(1.1); }
@@ -217,72 +227,69 @@
             </div>
         </div>
 
-        <div class="slide" data-text="小さな傷からウイルスが皮膚に入り込み、感染してイボをつくります。ウイルスに感染した細胞は分裂が活発になり、正常組織を押しのけて増えます。">
-      <div class="card">
-          <div class="slide-label"><span class="slide-label-text">イボの原因</span></div>
-          <div class="flex-1 flex flex-col justify-center">
-              <div class="space-y-10 px-10">
-                  <div class="p-12 bg-white border-2 border-emerald-100 rounded-3xl shadow-sm">
-                      <p class="text-4xl font-black text-emerald-800 leading-relaxed text-center">
-                          小さな傷から<span class="text-rose-500">ウイルス</span>が皮膚に入り込み、<br>感染してイボをつくります。
-                      </p>
-                  </div>
-                  <div class="p-12 bg-white border-2 border-emerald-100 rounded-3xl shadow-sm">
-                      <p class="text-4xl font-black text-emerald-800 leading-relaxed text-center">
-                          ウイルスに感染した細胞は分裂が活発になり、<br>
-                          正常組織を押しのけて増えます。
-                      </p>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+        <div class="slide">
+            <div class="card">
+                <div class="slide-label"><span class="slide-label-text">イボの原因</span></div>
+                <div class="flex-1 flex flex-col justify-center">
+                    <div class="space-y-10 px-10">
+                        <div class="p-12 bg-white border-2 border-emerald-100 rounded-3xl shadow-sm">
+                            <p class="text-4xl font-black text-emerald-800 leading-relaxed text-center">
+                                小さな傷から<span class="text-rose-500">ウイルス</span>が皮膚に入り込み、<br>感染してイボをつくります。
+                            </p>
+                        </div>
+                        <div class="p-12 bg-white border-2 border-emerald-100 rounded-3xl shadow-sm">
+                            <p class="text-4xl font-black text-emerald-800 leading-relaxed text-center">
+                                ウイルスに感染した細胞は分裂が活発になり、<br>
+                                正常組織を押しのけて増えます。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="slide">
             <div class="card">
                 <div class="slide-label"><span class="slide-label-text">治療方法とその後の経過</span></div>
                 <div class="flex-1 flex flex-col justify-center space-y-6">
-                  <div class="grid grid-cols-4 gap-6 h-full items-stretch">
-  <div class="flex flex-col gap-3">
-      <div class="aspect-square img-box border-2 border-emerald-100">
-          <img src="step_day0.png" alt="治療当日" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
-      </div>
-      <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex-1 text-center">
-          <p class="text-emerald-700 font-black mb-2 text-xl border-b-2 border-emerald-100 pb-1">当日</p>
-          <p class="text-lg font-bold leading-relaxed text-slate-600">治療当日の様子</p>
-      </div>
-  </div>
-
-  <div class="flex flex-col gap-3">
-      <div class="aspect-square img-box border-2 border-blue-100">
-          <img src="step_day3_blister.png" alt="数日後 水疱" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
-      </div>
-      <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl flex-1 text-center">
-          <p class="text-blue-700 font-black mb-2 text-xl border-b-2 border-blue-100 pb-1">数日後</p>
-          <p class="text-lg font-bold leading-relaxed text-slate-600">水疱になることがあります</p>
-      </div>
-  </div>
-
-  <div class="flex flex-col gap-3">
-      <div class="aspect-square img-box border-2 border-rose-100">
-          <img src="step_day3_blood.png" alt="数日後 血豆" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
-      </div>
-      <div class="p-4 bg-rose-50 border border-rose-200 rounded-xl flex-1 text-center">
-          <p class="text-rose-700 font-black mb-2 text-xl border-b-2 border-rose-100 pb-1">数日後</p>
-          <p class="text-lg font-bold leading-relaxed text-slate-600">血豆になることがあります</p>
-      </div>
-  </div>
-
-  <div class="flex flex-col gap-3">
-      <div class="aspect-square img-box border-2 border-emerald-100">
-          <img src="step_day5.png" alt="5日後" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
-      </div>
-      <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex-1 text-center">
-          <p class="text-emerald-800 font-black mb-2 text-xl border-b-2 border-emerald-100 pb-1">5日後</p>
-          <p class="text-lg font-bold leading-relaxed text-slate-600">落ち着いてきます</p>
-      </div>
-  </div>
-</div>
+                    <div class="grid grid-cols-4 gap-6 h-full items-stretch">
+                        <div class="flex flex-col gap-3">
+                            <div class="aspect-square img-box border-2 border-emerald-100">
+                                <img src="step_day0.png" alt="治療当日" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
+                            </div>
+                            <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex-1 text-center">
+                                <p class="text-emerald-700 font-black mb-2 text-xl border-b-2 border-emerald-100 pb-1">当日</p>
+                                <p class="text-lg font-bold leading-relaxed text-slate-600">治療当日の様子</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <div class="aspect-square img-box border-2 border-blue-100">
+                                <img src="step_day3_blister.png" alt="数日後 水疱" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
+                            </div>
+                            <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl flex-1 text-center">
+                                <p class="text-blue-700 font-black mb-2 text-xl border-b-2 border-blue-100 pb-1">数日後</p>
+                                <p class="text-lg font-bold leading-relaxed text-slate-600">水疱になることがあります</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <div class="aspect-square img-box border-2 border-rose-100">
+                                <img src="step_day3_blood.png" alt="数日後 血豆" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
+                            </div>
+                            <div class="p-4 bg-rose-50 border border-rose-200 rounded-xl flex-1 text-center">
+                                <p class="text-rose-700 font-black mb-2 text-xl border-b-2 border-rose-100 pb-1">数日後</p>
+                                <p class="text-lg font-bold leading-relaxed text-slate-600">血豆になることがあります</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <div class="aspect-square img-box border-2 border-emerald-100">
+                                <img src="step_day5.png" alt="5日後" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
+                            </div>
+                            <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex-1 text-center">
+                                <p class="text-emerald-800 font-black mb-2 text-xl border-b-2 border-emerald-100 pb-1">5日後</p>
+                                <p class="text-lg font-bold leading-relaxed text-slate-600">落ち着いてきます</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -339,9 +346,6 @@
     </div>
 
     <script>
-        /**
-         * ナレーションデータ（編集用）
-         */
         const narrationData = [
             "ウイルス性のイボについてご説明します。",
             "イボは、ウイルスの一種が皮膚に感染してできます。小さな傷があると、そこから皮膚に入り込み、イボをつくると考えられています。感染した細胞はまわりの正常組織を押しのけて、増え続けます。",
@@ -362,23 +366,27 @@
         let synth = window.speechSynthesis;
         let currentUtterance = null;
 
-        /**
-         * ブラウザ標準の読み上げ機能 (Web Speech API) を使用
-         */
+        // iOSオーディオ制限解除用
+        function unlockIOSAudio() {
+            const silent = new SpeechSynthesisUtterance("");
+            silent.volume = 0;
+            synth.speak(silent);
+        }
+
         function speak(text) {
             return new Promise(resolve => {
-                // 字幕の表示
+                synth.cancel();
+
                 subtitleArea.innerText = text;
                 subtitleArea.classList.add('visible');
 
-                // 読み上げの設定
                 currentUtterance = new SpeechSynthesisUtterance(text);
                 currentUtterance.lang = 'ja-JP';
-                currentUtterance.rate = 1.3; // 読み上げ速度
-		currentUtterance.pitch = 1.3;// 声の高さ
+                currentUtterance.rate = 1.3;
+                currentUtterance.pitch = 1.3;
 
                 currentUtterance.onend = () => {
-                    setTimeout(resolve, 1500); // 終了後、少し間を置く
+                    setTimeout(resolve, 1500);
                 };
 
                 currentUtterance.onerror = () => {
@@ -402,12 +410,10 @@
             progressFill.style.transition = 'none';
             progressFill.style.width = `${((idx) / slides.length) * 100}%`;
 
-            // スライド切り替え後のタメ
             await new Promise(r => setTimeout(r, 1000));
 
             if (!isPlaying) return;
 
-            // 外部配列からナレーションを取得
             const text = narrationData[currentIdx] || "";
             await speak(text);
 
@@ -453,11 +459,12 @@
         }
 
         function stopAudio() {
-            synth.cancel(); // 読み上げの強制停止
+            synth.cancel();
             subtitleArea.classList.remove('visible');
         }
 
         startBtn.addEventListener('click', () => {
+            unlockIOSAudio();
             overlay.style.display = 'none';
             isPlaying = true;
             playSlide(currentIdx);
