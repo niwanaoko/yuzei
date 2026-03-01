@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ウイルス性の治療解説動画</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+
+        body {
+            font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Meiryo", "Noto Sans JP", sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .video-canvas {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 100%);
+            position: relative;
+        }
+
+        .bg-deco {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+            animation: waveFlow 40s infinite linear;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+
+        @keyframes waveFlow {
+            0% { transform: rotate(0deg) translate(0, 0); }
+            50% { transform: rotate(5deg) translate(2%, 5%); }
+            100% { transform: rotate(0deg) translate(0, 0); }
+        }
+
+        .video-canvas::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        .slide {
+            display: none;
+            max-width: 1080px;
+            width: 94%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .slide.active {
+            display: block;
+            animation: slideFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideFade {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 32px;
+            padding: 4rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            min-height: 560px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide-label {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 1.8rem;
+            background: #f0fdf4;
+            border-radius: 12px;
+            border: 1px solid #d1fae5;
+            z-index: 50;
+        }
+
+        .slide-label-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #065f46;
+        }
+
+        .subtitle-area {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            color: #1e293b;
+            padding: 30px 40px;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 500;
+            line-height: 1.7;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 20;
+            border-top: 1px solid #e2e8f0;
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .subtitle-area.visible { opacity: 1; }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .video-canvas:hover .nav-btn { opacity: 1; }
+        .nav-btn:hover { background: white; transform: translateY(-50%) scale(1.1); }
+        .nav-prev { left: 24px; }
+        .nav-next { right: 24px; }
+
+        .progress-bar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: #f1f5f9;
+            z-index: 40;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #10b981;
+            width: 0%;
+            transition: width linear;
+        }
+
+        .img-box {
+            background-color: #f8fafc;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay" class="fixed inset-0 z-[2000] flex items-center justify-center bg-slate-50/95 backdrop-blur-md">
+        <div class="text-center p-12 max-w-lg">
+            <div class="mb-8 text-7xl">🏥</div>
+            <h1 id="overlay-title" class="text-3xl font-black mb-4 text-slate-800">ウイルス性のイボについて</h1>
+            <p id="overlay-desc" class="mb-10 text-slate-500 text-lg">疾患と治療法の説明です。</p>
+            <button id="start-btn" class="bg-emerald-600 text-white px-14 py-5 rounded-full text-2xl font-bold shadow-lg transition-all transform hover:scale(105 active:scale-95 flex items-center gap-3 mx-auto">
+                説明を再生する
+            </button>
+        </div>
+    </div>
+
+    <div class="video-canvas">
+        <div class="bg-deco"></div>
+        <div id="subtitle-area" class="subtitle-area"></div>
+        <div class="progress-bar-container"><div id="progress-fill" class="progress-fill"></div></div>
+
+        <button class="nav-btn nav-prev" onclick="manualPrev()" title="前へ">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="nav-btn nav-next" onclick="manualNext()" title="次へ">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+
+        <div class="slide active">
+            <div class="card">
+                <div class="slide-label"><span class="slide-label-text">疾患解説</span></div>
+                <div class="flex-1 flex flex-col items-center justify-center text-center">
+                    <div class="mb-8 p-6 bg-emerald-50 rounded-full">
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="1.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-5xl font-black text-slate-800 mb-4 tracking-tight">ウイルス性のイボ<br>（尋常性疣贅）について</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-text="小さな傷からウイルスが皮膚に入り込み、感染してイボをつくります。ウイルスに感染した細胞は分裂が活発になり、正常組織を押しのけて増えます。">
+      <div class="card">
+          <div class="slide-label"><span class="slide-label-text">イボの原因</span></div>
+          <div class="flex-1 flex flex-col justify-center">
+              <div class="space-y-10 px-10">
+                  <div class="p-12 bg-white border-2 border-emerald-100 rounded-3xl shadow-sm">
+                      <p class="text-4xl font-black text-emerald-800 leading-relaxed text-center">
+                          小さな傷から<span class="text-rose-500">ウイルス</span>が皮膚に入り込み、<br>感染してイボをつくります。
+                      </p>
+                  </div>
+                  <div class="p-12 bg-white border-2 border-emerald-100 rounded-3xl shadow-sm">
+                      <p class="text-4xl font-black text-emerald-800 leading-relaxed text-center">
+                          ウイルスに感染した細胞は分裂が活発になり、<br>
+                          正常組織を押しのけて増えます。
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+        <div class="slide">
+            <div class="card">
+                <div class="slide-label"><span class="slide-label-text">治療方法とその後の経過</span></div>
+                <div class="flex-1 flex flex-col justify-center space-y-6">
+                  <div class="grid grid-cols-4 gap-6 h-full items-stretch">
+  <div class="flex flex-col gap-3">
+      <div class="aspect-square img-box border-2 border-emerald-100">
+          <img src="step_day0.png" alt="治療当日" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
+      </div>
+      <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex-1 text-center">
+          <p class="text-emerald-700 font-black mb-2 text-xl border-b-2 border-emerald-100 pb-1">当日</p>
+          <p class="text-lg font-bold leading-relaxed text-slate-600">治療当日の様子</p>
+      </div>
+  </div>
+
+  <div class="flex flex-col gap-3">
+      <div class="aspect-square img-box border-2 border-blue-100">
+          <img src="step_day3_blister.png" alt="数日後 水疱" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
+      </div>
+      <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl flex-1 text-center">
+          <p class="text-blue-700 font-black mb-2 text-xl border-b-2 border-blue-100 pb-1">数日後</p>
+          <p class="text-lg font-bold leading-relaxed text-slate-600">水疱になることがあります</p>
+      </div>
+  </div>
+
+  <div class="flex flex-col gap-3">
+      <div class="aspect-square img-box border-2 border-rose-100">
+          <img src="step_day3_blood.png" alt="数日後 血豆" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
+      </div>
+      <div class="p-4 bg-rose-50 border border-rose-200 rounded-xl flex-1 text-center">
+          <p class="text-rose-700 font-black mb-2 text-xl border-b-2 border-rose-100 pb-1">数日後</p>
+          <p class="text-lg font-bold leading-relaxed text-slate-600">血豆になることがあります</p>
+      </div>
+  </div>
+
+  <div class="flex flex-col gap-3">
+      <div class="aspect-square img-box border-2 border-emerald-100">
+          <img src="step_day5.png" alt="5日後" class="object-cover w-full h-full" onerror="this.style.opacity='0.3'">
+      </div>
+      <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex-1 text-center">
+          <p class="text-emerald-800 font-black mb-2 text-xl border-b-2 border-emerald-100 pb-1">5日後</p>
+          <p class="text-lg font-bold leading-relaxed text-slate-600">落ち着いてきます</p>
+      </div>
+  </div>
+</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="card">
+                <div class="slide-label"><span class="slide-label-text">治療の継続</span></div>
+                <div class="flex-1 flex flex-col justify-center">
+                    <div class="p-12 bg-rose-50 rounded-3xl border border-rose-100 text-center">
+                        <p class="text-2xl font-bold text-slate-700 leading-loose">
+                            一見、治ったように見えても根が残っていて、再発することがあります。<br>自己判断で中止せず、根気強く治療を続けるようにしましょう。
+                        </p>
+                    </div>
+                    <p class="mt-10 text-3xl font-black text-center text-emerald-700 underline underline-offset-[12px]">イボが消失するまで治療を繰り返します</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="card">
+                <div class="slide-label"><span class="slide-label-text">Q&A</span></div>
+                <div class="flex-1 flex flex-col justify-center">
+                    <div class="space-y-8 max-w-3xl">
+                        <p class="text-4xl font-black text-emerald-800 leading-tight">Q 治療当日は、お風呂に入っても良いですか？</p>
+                        <p class="text-3xl font-bold text-slate-600 pl-8 border-l-8 border-emerald-100 leading-relaxed">
+                            お風呂に入っても大丈夫です。<br>ばんそうこうなども必要ありません。
+                        </p>
+                    </div>
+                </div>
+                <div class="absolute bottom-12 right-12 w-48 h-48 img-box bg-white shadow-md p-6">
+                    <img src="icon_bath.png" alt="入浴" class="object-contain w-full h-full" onerror="this.style.opacity='0.3'">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="card">
+                <div class="slide-label"><span class="slide-label-text">Q&A つづき</span></div>
+                <div class="flex-1 flex flex-col justify-center space-y-12">
+                    <div class="space-y-6">
+                        <p class="text-3xl font-black text-emerald-800">Q 何回くらい治療をすれば治りますか？</p>
+                        <div class="text-2xl font-bold text-slate-600 pl-8 border-l-4 border-emerald-100 space-y-6 leading-relaxed">
+                            <p>治療回数はイボの状態、できた場所により様々です。皮膚が厚いほど、またイボが大きいほど治療に時間がかかります。</p>
+                            <p>とくに足の裏や爪の周囲のイボは治りにくく、治療期間も長くなる傾向があります。</p>
+                        </div>
+                    </div>
+                    <div class="pt-10 border-t border-slate-100">
+                        <p class="text-3xl font-black text-emerald-800 mb-6">Q 家族にうつりますか？</p>
+                        <p class="text-2xl font-bold text-slate-600 pl-8 border-l-4 border-emerald-100 leading-relaxed">家族間でうつることがありますので、イボは触らないようにしましょう。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * ナレーションデータ（編集用）
+         */
+        const narrationData = [
+            "ウイルス性のイボについてご説明します。",
+            "イボは、ウイルスの一種が皮膚に感染してできます。小さな傷があると、そこから皮膚に入り込み、イボをつくると考えられています。感染した細胞はまわりの正常組織を押しのけて、増え続けます。",
+            "本日、液体窒素をしみ込ませた綿棒をイボに押しあて、軽いヤケド状態を作ります。数日すると、水ぶくれになったり、血豆になることもありますが、心配する必要はありません。5日くらいで落ち着いてきます。",
+            "イボが消失するまでこの治療を繰り返します。一見、治ったように見えても、根が残っていて、再発することがありますので、根気強く治療を続けるようにしましょう。",
+            "治療当日はお風呂・シャワーはいつも通りで大丈夫です。ばんそうこうなども必要ありません。",
+            "治療の回数はイボの状態、できた場所によりさまざまです。皮膚が厚いほど、またイボができてから時間がたつほど、治療に時間がかかります。とくに足の裏や爪の周囲のイボは治りにくく、治療期間も長くなる傾向があります。自宅でやっていただくことは特にありませんが、いじるとうつりますので、イボは触らないようにしましょう。"
+        ];
+
+        const slides = document.querySelectorAll('.slide');
+        const progressFill = document.getElementById('progress-fill');
+        const subtitleArea = document.getElementById('subtitle-area');
+        const overlay = document.getElementById('overlay');
+        const startBtn = document.getElementById('start-btn');
+
+        let currentIdx = 0;
+        let isPlaying = false;
+        let synth = window.speechSynthesis;
+        let currentUtterance = null;
+
+        /**
+         * ブラウザ標準の読み上げ機能 (Web Speech API) を使用
+         */
+        function speak(text) {
+            return new Promise(resolve => {
+                // 字幕の表示
+                subtitleArea.innerText = text;
+                subtitleArea.classList.add('visible');
+
+                // 読み上げの設定
+                currentUtterance = new SpeechSynthesisUtterance(text);
+                currentUtterance.lang = 'ja-JP';
+                currentUtterance.rate = 1.3; // 読み上げ速度
+		currentUtterance.pitch = 1.3;// 声の高さ
+
+                currentUtterance.onend = () => {
+                    setTimeout(resolve, 1500); // 終了後、少し間を置く
+                };
+
+                currentUtterance.onerror = () => {
+                    resolve();
+                };
+
+                synth.speak(currentUtterance);
+            });
+        }
+
+        async function playSlide(idx) {
+            if (idx < 0 || idx >= slides.length) {
+                finish();
+                return;
+            }
+
+            currentIdx = idx;
+            slides.forEach(s => s.classList.remove('active'));
+            slides[currentIdx].classList.add('active');
+
+            progressFill.style.transition = 'none';
+            progressFill.style.width = `${((idx) / slides.length) * 100}%`;
+
+            // スライド切り替え後のタメ
+            await new Promise(r => setTimeout(r, 1000));
+
+            if (!isPlaying) return;
+
+            // 外部配列からナレーションを取得
+            const text = narrationData[currentIdx] || "";
+            await speak(text);
+
+            if (isPlaying) {
+                playSlide(currentIdx + 1);
+            }
+        }
+
+        function finish() {
+            isPlaying = false;
+            stopAudio();
+            overlay.style.display = 'flex';
+            document.getElementById('overlay-title').innerText = "がんばって治療をしていきましょう！";
+            startBtn.innerText = "最初から再生する";
+            currentIdx = 0;
+            progressFill.style.width = '100%';
+        }
+
+        function manualNext() {
+            stopAudio();
+            isPlaying = false;
+            if (currentIdx < slides.length - 1) {
+                currentIdx++;
+                updateUI();
+            } else {
+                finish();
+            }
+        }
+
+        function manualPrev() {
+            stopAudio();
+            isPlaying = false;
+            if (currentIdx > 0) {
+                currentIdx--;
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            slides.forEach((s, i) => s.classList.toggle('active', i === currentIdx));
+            subtitleArea.classList.remove('visible');
+            progressFill.style.width = `${((currentIdx) / slides.length) * 100}%`;
+        }
+
+        function stopAudio() {
+            synth.cancel(); // 読み上げの強制停止
+            subtitleArea.classList.remove('visible');
+        }
+
+        startBtn.addEventListener('click', () => {
+            overlay.style.display = 'none';
+            isPlaying = true;
+            playSlide(currentIdx);
+        });
+    </script>
+</body>
+</html>
